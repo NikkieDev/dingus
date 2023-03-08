@@ -38,17 +38,17 @@ module.exports = {
 
             if (rows.length == 1) {
                 core.execQuery(i, q, d);
-                core.execQuery(i, "UPDATE users SET tokens = ? WHERE userid = ?", [rows[0].tokens-30, i.user.id])
+                core.execQuery(i, "UPDATE users SET tokens = ? WHERE userid = ?", [rows[0].tokens-config.prices.cheap, i.user.id])
 
-                return i.reply(`Your pronouns have been set to ${i.options.getString('pronouns')}\nYou now have ${rows[0].tokens-30} tokens`);
+                return i.reply(`Your pronouns have been set to ${i.options.getString('pronouns')}\nYou now have ${rows[0].tokens-config.prices.cheap} tokens`);
             } else if (rows.length > 1) {
                 return i.reply('A database interferance has occured, please contact support.');
             } else {
                 core.initializeAccount(i);
                 core.execQuery(i, q, d);
-                core.execQuery(i, "UPDATE users SET tokens = ? WHERE userid = ?", [rows[0].tokens-30, i.user.id])
+                core.execQuery(i, "UPDATE users SET tokens = ? WHERE userid = ?", [rows[0].tokens-config.prices.cheap, i.user.id])
 
-                return i.reply(`Your account has been created and your pronouns have been set to ${i.options.getString('pronouns')}\nYou now have ${rows[0].tokens-30} tokens`);
+                return i.reply(`Your account has been created and your pronouns have been set to ${i.options.getString('pronouns')}\nYou now have ${rows[0].tokens-config.prices.cheap} tokens`);
             }
         });
 
