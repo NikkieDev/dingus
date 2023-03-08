@@ -2,6 +2,7 @@ const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js');
 const config = require('../private/config.json');
 const core = require('../core.js');
 
+
 module.exports = {
     data: new SlashCommandBuilder()
     .setName('pronouns')
