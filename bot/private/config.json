@@ -3,9 +3,13 @@
 	"url": "localhost",
 	"color": "0x5662F6",
 	"client_id": "984840045267664946",
+	"name": "dingus",
 	"prices": {
 		"cheap": 30,
 		"mid": 100,
 		"expensive": 500
-	}
+	},
+	"db": "dingus",
+	"col": "users",
+	"conn": "mongodb+srv://root:sudo@cluster0.re7py0d.mongodb.net/test"
 }

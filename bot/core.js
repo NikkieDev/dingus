@@ -1,44 +1,52 @@
-const sql = require('sqlite3');
-const path = require('path');
+const mc = require('mongodb').MongoClient;
+const config = require('./private/config.json');
 
-const initializeAccount = (i) => {
-    const db = new sql.Database(path.join(__dirname, '../private/db.sqlite3'));
+async function initializeAccount(userid) {
+    const conn = await mc.connect(config.conn);
+    const user = await conn.db(config.db).collection(config.collection).findOne({userid: userid});
 
-    db.all("INSERT INTO `users` (userid) VALUES (?)", [i.user.id], (err) => {
-        if (err) return console.error(err.message);
-    });
+    if (!user) {
+        const newUser = {
+            userid: userid,
+            tokens: 100,
+            gift_tokens: 0,
+            name: String,
+            gender: String,
+            pronouns: String,
+            sig_other: Number,
+            email: String,
+            unlim: false
+        }
 
-    db.close(err => {
-        if (err) return console.error(err.message);
-    });
+        await conn.db(config.db).collection(config.collection).insertOne(newUser);
+        await conn.close();
 
+        return true;
+    } else {
+        await conn.close();
+        return false;
+    }
+}
+
+async function accountExists(userid) {
+    const conn = await mc.connect(config.conn);
+    console.log(conn);
+    conn.close();
     return;
 }
 
-const execQuery = (i, query, params=null, returns=false) => {
-    const db = new sql.Database(path.join(__dirname, '../private/db.sqlite3'));
+async function withdraw(userid, value) {
+    const conn = await mc.connect(config.conn);
+    const user = conn.db(config.db).collection(config.collection).findOne({userid: userid});
+    console.log(user);
+}
 
-    if (params.length > 0) db.all(query, params, (err, rows) => {
-        if (err) return console.error(err.message);
-        if (returns) {
-            return rows;
-        }
-    });
-    else db.all(query, [], (err, rows) => {
-        if (err) return console.error(err.message);
-        if (returns) {
-            return rows;
-        }
-    });
-
-    db.close(err => {
-        if (err) return console.error(err.message);
-    });
-
-    return;
+function balanceCheck() {
+    // fetch amount of tokens
 }
 
 module.exports = {
     initializeAccount,
-    execQuery
+    balanceCheck,
+    accountExists
 }
