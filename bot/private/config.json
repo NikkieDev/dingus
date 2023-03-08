@@ -11,5 +11,5 @@
 	},
 	"db": "dingus",
 	"col": "users",
-	"conn": "mongodb+srv://root:sudo@cluster0.re7py0d.mongodb.net/test"
+	"conn": "mongodb+srv://nikkie:dev@cluster0.xl58b8v.mongodb.net/test"
 }

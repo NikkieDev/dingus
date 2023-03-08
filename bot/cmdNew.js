@@ -14,7 +14,7 @@ const r = new REST({version: '10'}).setToken(config.token);
 
 (async () => {
     try {
-        console.log('Uploading commands...');
+        cmds.forEach(cmd => console.log(`Uploading ${cmd.name}`))
         const d = await r.put(Routes.applicationCommands(config.client_id), {body: cmds});
     } catch (err) {
         console.error(err);

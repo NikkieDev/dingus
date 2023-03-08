@@ -2,37 +2,39 @@ const mc = require('mongodb').MongoClient;
 const config = require('./private/config.json');
 
 async function initializeAccount(userid) {
+    console.log(`Creating user account '${userid}'`)
     const conn = await mc.connect(config.conn);
-    const user = await conn.db(config.db).collection(config.collection).findOne({userid: userid});
+    const db = conn.db(config.db)
+    const col = db.collection(config.col)
 
-    if (!user) {
-        const newUser = {
-            userid: userid,
-            tokens: 100,
-            gift_tokens: 0,
-            name: String,
-            gender: String,
-            pronouns: String,
-            sig_other: Number,
-            email: String,
-            unlim: false
-        }
-
-        await conn.db(config.db).collection(config.collection).insertOne(newUser);
-        await conn.close();
-
-        return true;
-    } else {
-        await conn.close();
-        return false;
+    const newUser = {
+        userid: userid,
+        tokens: 100,
+        gift_tokens: 0,
+        name: '',
+        gender: '',
+        pronouns: '',
+        sig_other: undefined,
+        email: '',
+        unlim: false
     }
+
+    await col.insertOne(newUser);
+    conn.close();
+
+    return true;
 }
 
 async function accountExists(userid) {
     const conn = await mc.connect(config.conn);
-    console.log(conn);
-    conn.close();
-    return;
+    const db = conn.db(config.db);
+    const col = db.collection(config.col);
+
+    const user = await col.findOne({userid: userid});
+    console.log(user);
+
+    if (!user) {conn.close(); return false}
+    else if (user) {conn.close(); return true};
 }
 
 async function withdraw(userid, value) {

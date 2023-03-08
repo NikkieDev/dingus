@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js');
-const path = require('path');
 const config = require('../private/config.json');
 const core = require('../core.js');
 
@@ -24,7 +23,11 @@ module.exports = {
     ),
 
     async handleSet(i) {
-        core.accountExists(i.user.id);
+        if (await !core.accountExists(i.user.id)) {
+            await core.initializeAccount(i.user.id);
+        } else {
+            return i.reply("Account exists");
+        }
     },
 
     async handleGet(i) {
