@@ -1,7 +1,7 @@
-const { SlashCommandBuilder, EmbedBuilder, Embed } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, Embed, UserSelectMenuBuilder } = require('discord.js');
 const config = require('../private/config.json');
-const core = require('../core.js');
-
+const core = require('../core');
+const users = require('../users');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,11 +24,18 @@ module.exports = {
     ),
 
     async handleSet(i) {
-        if (await !core.accountExists(i.user.id)) {
+        const accCheck = await core.accountExists(i.user.id);
+        let msg = '';
+
+        if (!accCheck) {
             await core.initializeAccount(i.user.id);
+            msg = `Your account has been created and your pronouns have been set to ${i.options.getString('pronouns')}`;
         } else {
-            return i.reply("Account exists");
+            await users.setPronouns(i.user.id, i.options.getString('pronouns'));
+            msg = `Your pronouns have been set to ${i.options.getString('pronouns')}`;
         }
+
+        return i.reply(msg);
     },
 
     async handleGet(i) {

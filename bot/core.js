@@ -37,18 +37,7 @@ async function accountExists(userid) {
     else if (user) {conn.close(); return true};
 }
 
-async function withdraw(userid, value) {
-    const conn = await mc.connect(config.conn);
-    const user = conn.db(config.db).collection(config.collection).findOne({userid: userid});
-    console.log(user);
-}
-
-function balanceCheck() {
-    // fetch amount of tokens
-}
-
 module.exports = {
     initializeAccount,
-    balanceCheck,
     accountExists
 }
