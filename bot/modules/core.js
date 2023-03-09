@@ -1,5 +1,5 @@
 const mc = require('mongodb').MongoClient;
-const config = require('./private/config.json');
+const config = require('../private/config.json');
 
 async function initializeAccount(userid) {
     console.log(`Creating user account '${userid}'`)

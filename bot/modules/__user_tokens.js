@@ -1,5 +1,5 @@
 const mc = require('mongodb').MongoClient;
-const conf = require('./private/config.json');
+const conf = require('../private/config.json');
 
 async function withdraw(user, amount, tokenType) {
     const conn = await mc.connect(conf.conn);
