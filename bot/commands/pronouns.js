@@ -61,6 +61,7 @@ module.exports = {
         const em = new EmbedBuilder();
 
         if (!accCheck) return i.reply("This user doesn't have an account yet!");
+        else {} // fetch user
     },
 
     async execute(i) {

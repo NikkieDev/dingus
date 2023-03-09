@@ -24,6 +24,7 @@ async function balanceCheck(user, type) {
     const usr = await col.findOne({userid: user});
     let balance = (type == "tokens")?usr.tokens:(type == 'gift_tokens')?usr.gift_tokens:undefined;
 
+    conn.close();
     return balance;
 }
 
