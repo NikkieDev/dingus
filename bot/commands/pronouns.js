@@ -1,7 +1,8 @@
-const { SlashCommandBuilder, EmbedBuilder, Embed, UserSelectMenuBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 const config = require('../private/config.json');
 const core = require('../core');
 const users = require('../users');
+const __tokens = require('../__user_tokens');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -25,21 +26,41 @@ module.exports = {
 
     async handleSet(i) {
         const accCheck = await core.accountExists(i.user.id);
+        const em = new EmbedBuilder();
         let msg = '';
 
         if (!accCheck) {
             await core.initializeAccount(i.user.id);
             msg = `Your account has been created and your pronouns have been set to ${i.options.getString('pronouns')}`;
-        } else {
-            await users.setPronouns(i.user.id, i.options.getString('pronouns'));
-            msg = `Your pronouns have been set to ${i.options.getString('pronouns')}`;
-        }
 
-        return i.reply(msg);
+        } else msg = `Your pronouns have been set to ${i.options.getString('pronouns')}`;
+
+        const bCheck = await __tokens.affordCheck(i.user.id, config.prices.pronounChange);
+
+        if (!bCheck) return i.reply(`You do not have enough tokens (${config.prices.pronounChange})!\nBuy more with /store`);
+        
+        await users.setPronouns(i.user.id, i.options.getString('pronouns'));
+        const bRemain = await __tokens.withdraw(i.user.id, config.prices.pronounChange, 'tokens');
+        
+        em.setAuthor({name: config.name})
+        em.setDescription(msg);
+        em.setColor(config.color)
+        .setTitle('Pronouns')
+        .setFooter({text: "Powered by KuByX Softworks"})
+        .addFields(
+            { name: '\u200B', value: '\u200B', inline: false },
+            { name: "Remaining tokens", value: bRemain.toString(), inline: true },
+            { name: "Tokens deducted", value: config.prices.pronounChange.toString(), inline: true }
+        );
+
+        return i.reply({embeds: [em]});
     },
 
     async handleGet(i) {
-        return;
+        const accCheck = await core.accountExists(i.options.getUser('target'));
+        const em = new EmbedBuilder();
+
+        if (!accCheck) return i.reply("This user doesn't have an account yet!");
     },
 
     async execute(i) {

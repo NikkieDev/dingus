@@ -5,9 +5,10 @@
 	"client_id": "984840045267664946",
 	"name": "dingus",
 	"prices": {
-		"cheap": 30,
-		"mid": 100,
-		"expensive": 500
+		"pronounChange": 30,
+		"genderChange": 30,
+		"nameChange": 100,
+		"partnerChange": 300
 	},
 	"db": "dingus",
 	"col": "users",

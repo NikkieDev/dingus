@@ -1,20 +1,52 @@
 const mc = require('mongodb').MongoClient;
 const conf = require('./private/config.json');
 
-async function withdraw(user, amount) {
+async function withdraw(user, amount, tokenType) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
 
+    if (tokenType == 'tokens') await col.updateOne({userid: user}, {$inc: {tokens: -amount}});
+    else if (tokenType == 'gift_tokens') await col.updateOne({userid: user}, {$inc: {gift_tokens: -amount}});
+    
+    const rData = await col.findOne({userid: user});
+    const remain = rData.tokens;
+
+    conn.close();
+    return remain;
 }
 
-async function balanceCheck(user) {
+async function balanceCheck(user, type) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
 
+    const usr = await col.findOne({userid: user});
+    let balance = (type == "tokens")?usr.tokens:(type == 'gift_tokens')?usr.gift_tokens:undefined;
+
+    return balance;
+}
+
+async function affordCheck(user, price) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
+
+    const userBal = await col.findOne({userid: user});
+    const _userBal = userBal.tokens;
+    const val = (_userBal > price) ? true:false;
+
+    conn.close();
+    return val;
 }
 
 async function gift(user, target, amount) {
-    
+
 }
 
 module.exports = {
     withdraw,
     balanceCheck,
+    affordCheck,
     gift
 }

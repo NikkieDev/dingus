@@ -29,9 +29,7 @@ async function accountExists(userid) {
     const conn = await mc.connect(config.conn);
     const db = conn.db(config.db);
     const col = db.collection(config.col);
-
     const user = await col.findOne({userid: userid});
-    console.log(user);
 
     if (!user) {conn.close(); return false}
     else if (user) {conn.close(); return true};
