@@ -61,7 +61,7 @@ module.exports = {
         const em = new EmbedBuilder();
 
         if (!accCheck) return i.reply("This user doesn't have an account yet!");
-        else {} // fetch user
+        else {}
     },
 
     async execute(i) {
@@ -72,7 +72,7 @@ module.exports = {
             else await this.handleGet(i);
         } catch (err) {
             await i.reply("An error has occured");
-            console.log(err);
+            return console.log(err);
         }
     }
 }
