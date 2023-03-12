@@ -19,7 +19,7 @@ module.exports = {
     )
     .addSubcommand(cmd =>
         cmd.setName('buy')
-        .setDescription("Top up on extra tokens for you, your friends, or your significant other!")
+        .setDescription("Top up on extra tokerecipientns for you, your friends, or your significant other!")
     ),
 
     async handleBuy(i) {
@@ -75,7 +75,12 @@ module.exports = {
     },
 
     async handleGift(i) {
-
+        const [target, amount] = [i.options.getUser('recipient'), i.options.getInteger('amount')];
+        const lmfao = {
+            'recipient': target,
+            'value': amount.toString()
+        }
+        return i.reply(lmfao.toString());
     },
 
     async execute(i) {
