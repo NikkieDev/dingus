@@ -48,7 +48,6 @@ module.exports = {
         .setTitle('Pronouns')
         .setFooter({text: "Powered by KuByX Softworks"})
         .addFields(
-            { name: '\u200B', value: '\u200B', inline: false },
             { name: "Remaining tokens", value: bRemain.toString(), inline: true },
             { name: "Tokens deducted", value: config.prices.pronounChange.toString(), inline: true }
         );
@@ -57,11 +56,32 @@ module.exports = {
     },
 
     async handleGet(i) {
-        const accCheck = await core.accountExists(i.options.getUser('target'));
+        const fetchUser = i.options.getUser('target');
+        const accCheck = await core.accountExists(fetchUser.id);
         const em = new EmbedBuilder();
 
         if (!accCheck) return i.reply("This user doesn't have an account yet!");
-        else {} // fetch user
+        else {
+            const found = await core.fetchUser(fetchUser.id);
+            let name = undefined;
+
+            if (found.name != 'Not set') name = found.name;
+            else name = fetchUser.username;
+
+            em.setAuthor({name: config.name})
+            .setColor(config.color)
+            .setTitle(name)
+            .setFooter({text: 'Powered by KuByX Softworks'})
+            .addFields(
+                { name: 'Gender', value: found.gender, inline: true },
+                { name: 'Pronouns', value: found.pronouns, inline: true },
+                { name: '\u200B', value: '\u200B', inline: false },
+                { name: 'Partner (s/o)', value: found.sig_other, inline: true },
+                { name: 'Sexuality', value: found.sexuality, inline: true }
+            );
+
+            return i.reply({embeds: [em]});
+        }
     },
 
     async execute(i) {

@@ -19,6 +19,15 @@ async function setGender(user, gender) {
     return await conn.close();
 }
 
+async function setSex(user, sexuality) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
+
+    await col.updateOne({userid: user}, {$set: {sexuality: sexuality}});
+    return await conn.close();
+}
+
 async function setName(user, name) {
     const conn = await mc.connect(conf.conn);
     const db = conn.db(conf.db);

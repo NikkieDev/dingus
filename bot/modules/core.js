@@ -11,11 +11,12 @@ async function initializeAccount(userid) {
         userid: userid,
         tokens: 100,
         gift_tokens: 0,
-        name: '',
-        gender: '',
-        pronouns: '',
-        sig_other: undefined,
-        email: '',
+        name: 'Not set',
+        gender: 'Not set',
+        pronouns: 'Not set',
+        sexuality: 'Not set',
+        sig_other: 'Single',
+        email: 'Not set',
         unlim: false
     }
 
@@ -35,7 +36,25 @@ async function accountExists(userid) {
     else if (user) {conn.close(); return true};
 }
 
+
+async function fetchUser(user) {
+    const conn = await mc.connect(config.conn);
+    const db = conn.db(config.db);
+    const col = db.collection(config.col);
+    
+    const userData = await col.findOne({userid: user});
+    if (!userData) {
+        conn.close();
+        return false
+    } else {
+        conn.close();
+
+        return userData;
+    }
+}
+
 module.exports = {
     initializeAccount,
-    accountExists
+    accountExists,
+    fetchUser
 }
