@@ -2,6 +2,10 @@
   <router-view />
 </template>
 
-<script setup>
-  //
+<script>
+  import nav from '@/components/nav.vue'
+
+  export default {
+    components: [nav]
+  }
 </script>

@@ -1,4 +1,16 @@
 {
+    "protocol": "http",
+    "url": "localhost",
     "port": 3005,
-    "name": "dingus"
+    "name": "dingus",
+    "key": "sk_test_51KLpnRLFZgN70ekwq8PeFEfpxBaBzmTsKeSBjyTbr5iGxIsgQGtPwFR1Cr4IzlHUj2yHRWFkPSRtQWW8eoMeK6cp007qnzFJFU",
+    "products": [
+        [1, {"priceInCents": 129, "name": "100 tokens", "desc": "100 tokens for you, 10 tokens to gift, and 1 token for your s/o"}],
+        [2, {"priceInCents": 249, "name": "300 tokens", "desc": "300 tokens for you, 30 tokens to gift, and 10 token for your s/o"}],
+        [3, {"priceInCents": 499, "name": "900 tokens", "desc": "900 tokens for you, 100 tokens to gift, and 30 token for your s/o"}],
+        [4, {"priceInCents": 129, "name": "100 gift tokens", "desc": "100 tokens to gift, 10 tokens for you, and 1 token for your s/o"}],
+        [5, {"priceInCents": 249, "name": "300 gift tokens", "desc": "300 tokens to gift, 30 tokens for you, and 10 token for your s/o"}],
+        [6, {"priceInCents": 499, "name": "900 gift tokens", "desc": "900 tokens to gift, 100 tokens for you, and 30 token for your s/o"}],
+        [7, {"priceInCents": 899, "name": "Unlimited tokens", "desc": "Unlimited tokens forever"}]
+    ]
 }
