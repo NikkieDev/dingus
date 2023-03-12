@@ -3,7 +3,6 @@ module.exports = {
     async execute(i) {
         if (i.isChatInputCommand()) {
             const cmd = i.client.commands.get(i.commandName);
-            console.log(cmd);
 
             if (cmd) {
                 try {
@@ -14,7 +13,7 @@ module.exports = {
                 }
             }
         } else if (i.isButton()) {
-            
+            // handle buttons
         } else return;
     }
 }

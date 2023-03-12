@@ -28,13 +28,14 @@ async function balanceCheck(user, type) {
     return balance;
 }
 
-async function affordCheck(user, price) {
+async function affordCheck(user, price, gift) {
     const conn = await mc.connect(conf.conn);
     const db = conn.db(conf.db);
     const col = db.collection(conf.col);
 
     const userBal = await col.findOne({userid: user});
-    const _userBal = userBal.tokens;
+    const _userBal = (gift == false) ? userBal.tokens:userBal.gift_tokens;
+
     const val = (_userBal > price) ? true:false;
 
     conn.close();
@@ -42,7 +43,15 @@ async function affordCheck(user, price) {
 }
 
 async function gift(user, target, amount) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
 
+    await col.updateOne({userid: user}, {$inc: {gift_tokens: -amount}});
+    await col.updateOne({userid: target}, {$inc: {tokens: amount}});
+
+    conn.close();
+    return;
 }
 
 module.exports = {
@@ -51,3 +60,5 @@ module.exports = {
     affordCheck,
     gift
 }
+
+// optimize file with Conn/Close functions, execute query functions

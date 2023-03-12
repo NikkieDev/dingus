@@ -17,7 +17,7 @@ async function initializeAccount(userid) {
         sexuality: 'Not set',
         sig_other: 'Single',
         email: 'Not set',
-        unlim: false
+        unlim: false,
     }
 
     await col.insertOne(newUser);

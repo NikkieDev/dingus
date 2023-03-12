@@ -35,7 +35,7 @@ module.exports = {
 
         } else msg = `Your pronouns have been set to ${i.options.getString('pronouns')}`;
 
-        const bCheck = await __tokens.affordCheck(i.user.id, config.prices.pronounChange);
+        const bCheck = await __tokens.affordCheck(i.user.id, config.prices.pronounChange, false);
 
         if (!bCheck) return i.reply(`You do not have enough tokens (${config.prices.pronounChange})!\nBuy more with /store`);
         

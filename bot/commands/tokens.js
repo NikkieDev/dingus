@@ -74,42 +74,43 @@ module.exports = {
         return await i.reply({embeds: [em], components: [interactions], ephemeral: true});
     },
 
-    async handleBalance(i) {
-        const em = new EmbedBuilder()
-            .setAuthor({ name: config.name })        
-            .setDescription("Your token balance")
-            .setTitle("Token balance")
-            .setFooter({ text: "Powered by KuByX Softworks" })
-            .setColor(config.color)
-
-        const actions = new ActionRowBuilder()
-        .addComponents(
-            new ButtonBuilder()
-                .setLabel('Gift')
-                .setStyle(ButtonStyle.Success),
-            new ButtonBuilder()
-                .setLabel('Store')
-                .setStyle(ButtonStyle.Link)
-                .setURL(`http://${config.url}/store`)
-        );
-
-        const [tokens, giftTokens] = [await __tokens.balanceCheck(i.user.id, 'tokens'), await __tokens.balanceCheck(i.user.id, 'gift_tokens')];
-
-        em.addFields(
-            { name: 'Tokens', value: tokens.toString(), inline: true },
-            { name: 'Gift tokens', value: giftTokens.toString(), inline: true }
-        );
-
-        return await i.reply({ embeds: [em], components: [actions] });
-    },
-
     async handleGift(i) {
         const [target, amount] = [i.options.getUser('recipient'), i.options.getInteger('amount')];
-        const lmfao = {
-            'recipient': target,
-            'value': amount.toString()
+        const user = i.user;
+
+        const afford = await __tokens.affordCheck(user.id, amount, true);
+
+        if (!afford) return await i.reply("You don't have enough gift tokens for that.\n use `/token buy` to get more tokens!");
+        else {
+            await __tokens.gift(user.id, target.id, amount);
+
+            const remaining = await __tokens.balanceCheck(user.id, 'gift_tokens');
+            const repNew = await __tokens.balanceCheck(target.id, 'tokens');
+
+            const em = new EmbedBuilder()
+            .setAuthor({name: config.name})
+            .setTitle('Gifting')
+            .setFooter({text: 'Powered by KuByX Softworks'})
+            .setColor(config.color)
+            .addFields(
+                { name: 'Remaining gift tokens', value: remaining.toString(), inline: true },
+                { name: 'Gift tokens deducted', value: amount.toString(), inline: true }
+            );
+
+            const dmEm = new EmbedBuilder()
+            .setAuthor({name: config.name})
+            .setTitle("Gift received!")
+            .setDescription(`Received a gift from ${user.username}#${user.discriminator}`)
+            .setFooter({text: 'Powered by KuByX Softworks'})
+            .setColor(config.color)
+            .addFields(
+                { name: 'Amount received', value: amount.toString(), inline: true },
+                { name: 'New token balance', value: repNew.toString(), inline: true }
+            );
+
+            await target.send({embeds: [dmEm]});
+            return await i.reply({ephemeral: true, embeds: [em]});
         }
-        return i.reply(lmfao.toString());
     },
 
     async execute(i) {
@@ -120,7 +121,10 @@ module.exports = {
             else if (cmd == 'gift') await this.handleGift(i);
             else if (cmd == 'balance') await this.handleBalance(i);
         } catch (err) {
-            await i.reply("An error has occured");
+            let msg = "An error has occured";
+            if (cmd == 'gift') msg + ' you have not been charged.';
+
+            await i.reply(msg);
             console.log(err);
         }
     }
