@@ -52,7 +52,7 @@ module.exports = {
             { name: "Tokens deducted", value: config.prices.pronounChange.toString(), inline: true }
         );
 
-        return i.reply({embeds: [em]});
+        return i.reply({embeds: [em], ephemeral: true});
     },
 
     async handleGet(i) {
@@ -80,7 +80,7 @@ module.exports = {
                 { name: 'Sexuality', value: found.sexuality, inline: true }
             );
 
-            return i.reply({embeds: [em]});
+            return i.reply({embeds: [em], ephemeral: true});
         }
     },
 

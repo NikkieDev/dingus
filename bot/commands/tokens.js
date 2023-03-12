@@ -1,6 +1,7 @@
 const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRowBuilder } = require('discord.js');
 const config = require('../private/config.json');
 const core = require('../modules/core');
+const __tokens = require('../modules/__user_tokens');
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -45,11 +46,32 @@ module.exports = {
                 .setURL(`http://${config.url}/eula`)
         )
 
-        await i.reply({embeds: [em], components: [actions]})
+        return await i.reply({embeds: [em], components: [actions], ephemeral: true})
     },
 
     async handleBalance(i) {
+        const getBalance = [await __tokens.balanceCheck(i.user.id, 'tokens'), await __tokens.balanceCheck(i.user.id, 'gift_tokens')];
+
+        const em = new EmbedBuilder()
+        .setAuthor({name: config.name})
+        .setTitle("Token balance")
+        .setFooter({text: 'Powered by KuByX Softworks'})
+        .setColor(config.color)
+        .addFields(
+            { name: 'Tokens', value: getBalance[0].toString(), inline: true },
+            { name: 'Gift tokens', value: getBalance[1].toString(), inline: true }
+        );
+
+        const interactions = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setLabel("Store")
+                .setStyle(ButtonStyle.Link)
+                .setURL(`http://${config.url}/store`)
+            // gift button
+        );
         
+        return await i.reply({embeds: [em], components: [interactions], ephemeral: true});
     },
 
     async handleGift(i) {
