@@ -92,7 +92,7 @@ module.exports = {
             else await this.handleGet(i);
         } catch (err) {
             await i.reply("An error has occured");
-            console.log(err);
+            return console.log(err);
         }
     }
 }

@@ -24,10 +24,10 @@ module.exports = {
 
     async handleBuy(i) {
         const em = new EmbedBuilder()
-        .setAuthor({name: config.name})
+        .setAuthor({ name: config.name })
         .setDescription("Low on funds? Want to gift some tokens to your friends? Or do you need *UNLIMITED* tokens? For all your token needs, click on the links below")
         .setTitle('Store')
-        .setFooter({text: "Powered by KuByX Softworks"})
+        .setFooter({ text: "Powered by KuByX Softworks" })
         .setColor(config.color);
 
         const actions = new ActionRowBuilder()
@@ -44,7 +44,7 @@ module.exports = {
                 .setLabel("Read eula")
                 .setStyle(ButtonStyle.Link)
                 .setURL(`http://${config.url}/eula`)
-        )
+        );
 
         return await i.reply({embeds: [em], components: [actions], ephemeral: true})
     },
@@ -72,6 +72,35 @@ module.exports = {
         );
         
         return await i.reply({embeds: [em], components: [interactions], ephemeral: true});
+    },
+
+    async handleBalance(i) {
+        const em = new EmbedBuilder()
+            .setAuthor({ name: config.name })        
+            .setDescription("Your token balance")
+            .setTitle("Token balance")
+            .setFooter({ text: "Powered by KuByX Softworks" })
+            .setColor(config.color)
+
+        const actions = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+                .setLabel('Gift')
+                .setStyle(ButtonStyle.Success),
+            new ButtonBuilder()
+                .setLabel('Store')
+                .setStyle(ButtonStyle.Link)
+                .setURL(`http://${config.url}/store`)
+        );
+
+        const [tokens, giftTokens] = [await __tokens.balanceCheck(i.user.id, 'tokens'), await __tokens.balanceCheck(i.user.id, 'gift_tokens')];
+
+        em.addFields(
+            { name: 'Tokens', value: tokens.toString(), inline: true },
+            { name: 'Gift tokens', value: giftTokens.toString(), inline: true }
+        );
+
+        return await i.reply({ embeds: [em], components: [actions] });
     },
 
     async handleGift(i) {
