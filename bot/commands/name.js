@@ -23,7 +23,7 @@ module.exports = {
             return i.reply(`Your account has been created and your name has been set to ${i.options.getString('value')}`)
         }
 
-        const bCheck = await __tokens.affordCheck(i.user.id, conf.prices.nameChange, 'tokens');
+        const bCheck = await __tokens.affordCheck(i.user.id, conf.prices.nameChange, false);
         if (!bCheck) return await i.reply(`You do not have enough tokens (${conf.prices.nameChange}) to change your name!`);
 
         await users.setName(i.user.id, i.options.getString('value'));

@@ -23,7 +23,7 @@ module.exports = {
             return i.reply(`Your account has been created and your gender has been set to ${i.options.getString('value')}`)
         }
 
-        const bCheck = await __tokens.affordCheck(i.user.id, conf.prices.genderChange, 'tokens');
+        const bCheck = await __tokens.affordCheck(i.user.id, conf.prices.genderChange, false);
         if (!bCheck) return await i.reply(`You do not have enough tokens (${conf.prices.genderChange}) to change your gender!`);
 
         await users.setGender(i.user.id, i.options.getString('value'));

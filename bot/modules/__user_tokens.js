@@ -36,7 +36,7 @@ async function affordCheck(user, price, gift) {
     const userBal = await col.findOne({userid: user});
     const _userBal = (gift == false) ? userBal.tokens:userBal.gift_tokens;
 
-    const val = (_userBal > price) ? true:false;
+    const val = (_userBal >= price) ? true:false;
 
     conn.close();
     return val;
