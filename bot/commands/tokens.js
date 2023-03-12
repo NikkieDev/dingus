@@ -78,9 +78,13 @@ module.exports = {
         const [target, amount] = [i.options.getUser('recipient'), i.options.getInteger('amount')];
         const user = i.user;
 
+        const accCheck = await core.accountExists(user.id);
+        const findUser = await core.accountExists(target.id);
         const afford = await __tokens.affordCheck(user.id, amount, true);
 
-        if (!afford) return await i.reply("You don't have enough gift tokens for that.\n use `/token buy` to get more tokens!");
+        if (!accCheck) return await i.reply("You don't have an account yet!");
+        else if (!findUser) return await i.reply("This user does not have an account yet!");
+        else if (!afford) return await i.reply("You don't have enough gift tokens for that.\n use `/token buy` to get more tokens!");
         else {
             await __tokens.gift(user.id, target.id, amount);
 

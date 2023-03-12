@@ -8,7 +8,7 @@
 		"pronounChange": 30,
 		"genderChange": 30,
 		"nameChange": 100,
-		"partnerChange": 300
+		"partnerChange": 500
 	},
 	"db": "dingus",
 	"col": "users",
