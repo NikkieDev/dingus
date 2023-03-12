@@ -7,6 +7,7 @@
 	"prices": {
 		"pronounChange": 30,
 		"genderChange": 30,
+		"sexChange": 30,
 		"nameChange": 100,
 		"partnerChange": 500
 	},

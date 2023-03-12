@@ -50,5 +50,6 @@ module.exports = {
     setPronouns,
     setGender,
     setName,
-    setPartner
+    setPartner,
+    setSex
 }
