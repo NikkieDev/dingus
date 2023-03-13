@@ -7,7 +7,7 @@ const account = localStorage.getItem('id');
 let gifts = ref(undefined);
 let tokens = ref(undefined);
 
-function checkAccount() {
+async function checkAccount() {
     axios.post('http://localhost:3005/fetch_user', {id: account})
     .then(res => {
         const response = JSON.stringify(res);
@@ -19,23 +19,21 @@ function checkAccount() {
         document.getElementById('username').innerHTML = data.username;
     });
 }
-
-if (account) checkAccount();
 </script>
 
 <template>
     <div class="flex flex-col justify-center items-center">
         <div id="buttons" class="flex flex-col justify-center items-center gap-8">
             <v-container>
-                <v-container v-if="account" class="flex flex-col justify-center">
+                <v-container class="flex flex-col justify-center">
                     <v-text id="username"></v-text>
                     <v-container class="flex flex-row gap-8">
                         <v-text>tokens: <v-span id="tokens"></v-span></v-text>
                         <v-text>gifts: <v-span id="gifts"></v-span></v-text>
                     </v-container>
                 </v-container>
-                <v-container>
-                    <button v-else class="bg-blue-600 py-2 px-4 rounded shadow" @click="connectDisc()">Connect discord</button>
+                <v-container @load="async () => await checkAccount()">
+                    <button v-if="!account" class="bg-blue-600 py-2 px-4 rounded shadow" @click="connectDisc()">Connect discord</button>
                     <button></button>
                 </v-container>
             </v-container>
