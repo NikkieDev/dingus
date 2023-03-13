@@ -1,4 +1,7 @@
 {
+    "db": "dingus",
+	"col": "users",
+	"conn": "mongodb+srv://nikkie:dev@cluster0.xl58b8v.mongodb.net/test",
     "protocol": "http",
     "url": "localhost",
     "port": 3005,
