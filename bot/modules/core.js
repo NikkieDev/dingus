@@ -21,7 +21,7 @@ async function initializeAccount(userid) {
     }
 
     await col.insertOne(newUser);
-    conn.close();
+    await conn.close();
 
     return true;
 }
@@ -32,8 +32,8 @@ async function accountExists(userid) {
     const col = db.collection(config.col);
     const user = await col.findOne({userid: userid});
 
-    if (!user) {conn.close(); return false}
-    else if (user) {conn.close(); return true};
+    if (!user) {await conn.close(); return false}
+    else if (user) {await conn.close(); return true};
 }
 
 
@@ -44,11 +44,10 @@ async function fetchUser(user) {
     
     const userData = await col.findOne({userid: user});
     if (!userData) {
-        conn.close();
+        await conn.close();
         return false
     } else {
-        conn.close();
-
+        await conn.close();
         return userData;
     }
 }

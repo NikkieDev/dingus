@@ -20,6 +20,10 @@ module.exports = {
     .addSubcommand(cmd =>
         cmd.setName('buy')
         .setDescription("Top up on extra tokerecipientns for you, your friends, or your significant other!")
+    )
+    .addSubcommand(cmd => 
+        cmd.setName('reset')
+        .setDescription("Set your tokens to infinity")
     ),
 
     async handleBuy(i) {
@@ -67,7 +71,7 @@ module.exports = {
             new ButtonBuilder()
                 .setLabel("Store")
                 .setStyle(ButtonStyle.Link)
-                .setURL(`http://${config.url}/store`)
+                .setURL(`https://${config.url}/store`)
             // gift button
         );
         
@@ -117,13 +121,19 @@ module.exports = {
         }
     },
 
+    async handleUnlim(i) {
+        await __tokens.setUnlim(i.user.id);
+        return i.reply("If you have a premium account, your tokens have been set to infinity.");
+    },
+
     async execute(i) {
+        const cmd = i.options.getSubcommand();
         try {
-            const cmd = i.options.getSubcommand();
 
             if (cmd == 'buy') await this.handleBuy(i);
             else if (cmd == 'gift') await this.handleGift(i);
             else if (cmd == 'balance') await this.handleBalance(i);
+            else if (cmd == 'reset') await this.handleUnlim(i);
         } catch (err) {
             let msg = "An error has occured";
             if (cmd == 'gift') msg + ' you have not been charged.';

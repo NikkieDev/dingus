@@ -20,6 +20,8 @@ module.exports = {
 
         if (!accCheck) {
             await core.initializeAccount(i.user.id);
+            await __tokens.withdraw(i.user.id, conf.prices.nameChange, 'tokens');
+            await users.setName(i.user.id, i.options.getString('value'));
             return i.reply(`Your account has been created and your name has been set to ${i.options.getString('value')}`)
         }
 

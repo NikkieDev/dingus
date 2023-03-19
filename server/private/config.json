@@ -2,18 +2,18 @@
     "db": "dingus",
 	"col": "users",
 	"conn": "mongodb+srv://nikkie:dev@cluster0.xl58b8v.mongodb.net/test",
-    "protocol": "http",
-    "url": "localhost",
-    "port": 3005,
+    "protocol": "https",
+    "url": "dingus.kubyx.nl",
+    "port": 80,
     "name": "dingus",
-    "key": "sk_test_51KLpnRLFZgN70ekwq8PeFEfpxBaBzmTsKeSBjyTbr5iGxIsgQGtPwFR1Cr4IzlHUj2yHRWFkPSRtQWW8eoMeK6cp007qnzFJFU",
+    "key": "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",
     "products": [
-        [1, {"priceInCents": 129, "name": "100 tokens", "desc": "100 tokens for you, 10 tokens to gift, and 1 token for your s/o"}],
-        [2, {"priceInCents": 249, "name": "300 tokens", "desc": "300 tokens for you, 30 tokens to gift, and 10 token for your s/o"}],
-        [3, {"priceInCents": 499, "name": "900 tokens", "desc": "900 tokens for you, 100 tokens to gift, and 30 token for your s/o"}],
-        [4, {"priceInCents": 129, "name": "100 gift tokens", "desc": "100 tokens to gift, 10 tokens for you, and 1 token for your s/o"}],
-        [5, {"priceInCents": 249, "name": "300 gift tokens", "desc": "300 tokens to gift, 30 tokens for you, and 10 token for your s/o"}],
-        [6, {"priceInCents": 499, "name": "900 gift tokens", "desc": "900 tokens to gift, 100 tokens for you, and 30 token for your s/o"}],
-        [7, {"priceInCents": 899, "name": "Unlimited tokens", "desc": "Unlimited tokens forever"}]
+        [1, {"priceInCents": 129, "type": "tokens", "name": "100 tokens", "desc": "100 tokens for you, 10 tokens to gift, and 1 token for your s/o", "amount": 100}],
+        [2, {"priceInCents": 249, "type": "tokens", "name": "300 tokens", "desc": "300 tokens for you, 30 tokens to gift, and 10 token for your s/o", "amount": 300}],
+        [3, {"priceInCents": 499, "type": "tokens", "name": "900 tokens", "desc": "900 tokens for you, 100 tokens to gift, and 30 token for your s/o", "amount": 900}],
+        [4, {"priceInCents": 129, "type": "gift_tokens", "name": "100 gift tokens", "desc": "100 tokens to gift, 10 tokens for you, and 1 token for your s/o", "amount": 100}],
+        [5, {"priceInCents": 249, "type": "gift_tokens", "name": "300 gift tokens", "desc": "300 tokens to gift, 30 tokens for you, and 10 token for your s/o", "amount": 300}],
+        [6, {"priceInCents": 499, "type": "gift_tokens", "name": "900 gift tokens", "desc": "900 tokens to gift, 100 tokens for you, and 30 token for your s/o", "amount": 900}],
+        [7, {"priceInCents": 899, "type": "premium", "name": "Unlimited tokens", "desc": "Unlimited tokens forever", "amount": true}]
     ]
 }

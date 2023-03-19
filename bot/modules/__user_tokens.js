@@ -16,6 +16,16 @@ async function withdraw(user, amount, tokenType) {
     return remain;
 }
 
+async function setUnlim(user) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
+
+    const prem = await col.updateOne({userid: user, unlim: true}, {$set: {tokens: 9999999}})
+    await conn.close();
+    return true;
+}
+
 async function balanceCheck(user, type) {
     const conn = await mc.connect(conf.conn);
     const db = conn.db(conf.db);
@@ -58,7 +68,8 @@ module.exports = {
     withdraw,
     balanceCheck,
     affordCheck,
-    gift
+    gift,
+    setUnlim
 }
 
 // optimize file with Conn/Close functions, execute query functions
