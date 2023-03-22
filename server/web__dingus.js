@@ -5,6 +5,7 @@ const stripe = require('stripe')(conf.key)
 const mc = require('mongodb').MongoClient;
 const cors = require('cors');
 const md5 = require('md5');
+const ws = require('ws');
 
 const app = express();
 const port = conf.port;
@@ -41,6 +42,12 @@ app.post('/connect_discord', async (req, res) => {
 
     conn.close();
     return res.status(200).json({message: "Email matched to account", statusCode: 200});
+});
+
+app.post('/upvote', (req, res) => {
+    const soc = new ws('ws://localhost:3006');
+    soc.onopen = () => soc.send(JSON.stringify({state: 'connect', authorization: 'SERVER_BALLS', target: 'bot'}));
+    res.status(200).send({connecting: true});
 });
 
 app.post('/fetch_user', async (req, res) => {

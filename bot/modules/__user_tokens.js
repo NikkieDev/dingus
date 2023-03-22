@@ -16,6 +16,17 @@ async function withdraw(user, amount, tokenType) {
     return remain;
 }
 
+async function deposit(user, amount) {
+    const conn = await mc.connect(conf.conn);
+    const db = conn.db(conf.db);
+    const col = db.collection(conf.col);
+
+    await col.updateOne({userid: user}, {$inc: {tokens: amount}});
+
+    conn.close();
+    return;
+}
+
 async function setUnlim(user) {
     const conn = await mc.connect(conf.conn);
     const db = conn.db(conf.db);
@@ -69,7 +80,8 @@ module.exports = {
     balanceCheck,
     affordCheck,
     gift,
-    setUnlim
+    setUnlim,
+    deposit
 }
 
 // optimize file with Conn/Close functions, execute query functions
