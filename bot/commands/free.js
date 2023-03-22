@@ -29,15 +29,17 @@ module.exports = {
 
         const Soc = new ws('ws://localhost:3006');
         Soc.onopen = () => {
-            Soc.send(JSON.stringify({state: 'connect', authorization: 'CLIENTELE', target: 'user'}));
+            Soc.send(JSON.stringify({state: 'connect', authorization: 'CLIENTELE', target: 'user', userid: i.user.id}));
         }
 
-        Soc.on('message', msg => {
+        Soc.on('message', async msg => {
             const decoder = new TextDecoder();
             const data = JSON.parse(decoder.decode(msg));
 
-            if (data['command'] == 'close') {
+            if (data.command == 'close') {
                 Soc.close();
+            } else if (data.state == 'balanceTopped') {
+                return await i.editReply("Your vote has been confirmed, your balance has increased!");
             }
             
             console.log(data);
