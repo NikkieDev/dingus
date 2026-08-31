@@ -22,7 +22,7 @@ export default class Loader {
 			const commandPath = path.join(Files.getCommandsDir(), f);
 			const command = await import(pathToFileURL(commandPath));
 
-			if (!command.data) {
+			if (!command.default.data) {
 				console.log(`Event ${commandPath} is not valid`);
 				process.exit(2);
 			}

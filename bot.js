@@ -4,11 +4,13 @@ import { pathToFileURL } from 'url';
 import { config } from 'dotenv';
 import Files from './util/files.js';
 import Loader from './util/Loader.js';
+import Logger from './util/logger.js';
 
 config();
+const logger = new Logger('bot');
 
 if (!process.env.TOKEN) {
-	console.log("Unable to login without token");
+	logger.error('No token provided');
 	process.exit(1);
 }
 
@@ -30,16 +32,17 @@ for (const file of Files.getScriptFiles(events)) {
 	const p = path.join(events, file);
 	const event = await import(pathToFileURL(p));
 
-	if (!event.data) {
-		console.log(`Event ${p} is not valid`);
+	if (!event.default.name) {
+		logger.error(`Event ${p} is not valid`);
 		process.exit(2);
 	}
 
 	if (event.once) {
-		client.once(event.default.name, (...args) => event.execute(...args));
+		client.once(event.default.name, async (...args) => event.default.execute(...args));
 	} else {
-		client.on(event.default.name, (...args) => event.execute(...args));
+		client.on(event.default.name, async (...args) => await event.default.execute(...args));
 	}
 }
 
 client.login(process.env.TOKEN);
+logger.info('Client logged in');
