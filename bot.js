@@ -2,8 +2,8 @@ import { Client, Collection, GatewayIntentBits } from 'discord.js';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { config } from 'dotenv';
-import { updateCommands } from './util/cmdUpdate.js';
 import Files from './util/files.js';
+import Loader from './util/Loader.js';
 
 config();
 
@@ -12,29 +12,28 @@ if (!process.env.TOKEN) {
 	process.exit(1);
 }
 
-updateCommands();
-
+const loader = new Loader(
+	process.env.TOKEN,
+	process.env.GUILD_ID,
+	process.env.CLIENT_ID,
+	'prod' === process.env.ENVIRONMENT
+);
 const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]});
 client.commands = new Collection();
 
-const commands = Files.getCommandsDir();
-const events = Files.getEventsDir();
-
-for (const file of Files.getScriptFiles(commands)) {
-	const p = path.join(commands, file);
-	const cmd = await import(pathToFileURL(p));
-
-	client.commands.set(cmd.data.name, cmd);
+for (const { name, cmd } of await loader.registerCommands()) {
+	client.commands.set(name, cmd);
 }
 
+const events = Files.getEventsDir();
 for (const file of Files.getScriptFiles(events)) {
 	const p = path.join(events, file);
 	const event = await import(pathToFileURL(p));
 
 	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
+		client.once(event.default.name, (...args) => event.execute(...args));
 	} else {
-		client.on(event.name, (...args) => event.execute(...args));
+		client.on(event.default.name, (...args) => event.execute(...args));
 	}
 }
 
