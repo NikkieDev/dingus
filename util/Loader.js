@@ -3,6 +3,7 @@ import Files from './files.js';
 import path from 'path';
 import { pathToFileURL } from 'url';
 import { REST, Routes } from 'discord.js';
+import Logger from './logger.js';
 
 export default class Loader {
 	constructor(token, guildId, clientId, isProd) {
@@ -12,6 +13,7 @@ export default class Loader {
 		this.isProd = isProd;
 
 		this.rest = new REST().setToken(this.token);
+		this.logger = new Logger('loader');
 	}
 
 	async registerCommands() {
@@ -22,8 +24,8 @@ export default class Loader {
 			const commandPath = path.join(Files.getCommandsDir(), f);
 			const command = await import(pathToFileURL(commandPath));
 
-			if (!command.default.data) {
-				console.log(`Event ${commandPath} is not valid`);
+			if (!command.default || !command.default.data) {
+				this.logger.error(`Event ${commandPath} is not valid`);
 				process.exit(2);
 			}
 

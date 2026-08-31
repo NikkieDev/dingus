@@ -1,5 +1,5 @@
 import { Events } from "discord.js";
-import Guild from '../model/guild.js';
+import Guild from '../model/discord/guild.js';
 import Logger from '../util/logger.js';
 
 export default {

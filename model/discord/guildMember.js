@@ -1,0 +1,140 @@
+import Guild from './guild.js';
+
+export default class GuildMember {
+	#id;
+	#bot;
+	#username;
+	#globalName;
+	#nickname;
+	#joinedAt
+	#guild
+
+	static fromObject(obj) {
+		const __self = new GuildMember();
+		__self.#id = obj.user.id;
+		__self.#bot = obj.user.bot;
+		__self.#username = obj.user.username;
+		__self.#globalName = obj.user.globalName;
+		__self.#nickname = obj.nickname;
+		__self.#joinedAt = obj.joinedTimestamp;
+		__self.#guild = Guild.fromObject(obj.guild);
+
+		return __self;
+	}
+
+	getId() {
+		return this.#id;
+	}
+
+	isBot() {
+		return this.#bot;
+	}
+
+	getUsername() {
+		return this.#username;
+	}
+
+	getGlobalName() {
+		return this.#globalName;
+	}
+
+	getNickname() {
+		return this.#nickname;
+	}
+
+	getJoinedAt() {
+		return this.#joinedAt;
+	}
+
+	getGuild() {
+		return this.#guild;
+	}
+}
+//GuildMember {
+//  guild: <ref *1> Guild {
+//    id: '877605118973993040',
+//    name: 'new',
+//    icon: '0d93b1ce0e8855646216910ae7b4af19',
+//    features: [ 'NEWS', 'COMMUNITY' ],
+//    commands: GuildApplicationCommandManager {
+//      permissions: [ApplicationCommandPermissionsManager],
+//      guild: [Circular *1]
+//    },
+//    members: GuildMemberManager { guild: [Circular *1] },
+//    channels: GuildChannelManager { guild: [Circular *1] },
+//    bans: GuildBanManager { guild: [Circular *1] },
+//    roles: RoleManager { guild: [Circular *1] },
+//    presences: PresenceManager {},
+//    voiceStates: VoiceStateManager { guild: [Circular *1] },
+//    stageInstances: StageInstanceManager { guild: [Circular *1] },
+//    invites: GuildInviteManager { guild: [Circular *1] },
+//    scheduledEvents: GuildScheduledEventManager { guild: [Circular *1] },
+//    autoModerationRules: AutoModerationRuleManager { guild: [Circular *1] },
+//    soundboardSounds: GuildSoundboardSoundManager { guild: [Circular *1] },
+//    available: true,
+//    shardId: 0,
+//    splash: null,
+//    banner: null,
+//    description: null,
+//    verificationLevel: 1,
+//    vanityURLCode: null,
+//    nsfwLevel: 0,
+//    premiumSubscriptionCount: 0,
+//    discoverySplash: null,
+//    memberCount: 20,
+//    large: false,
+//    premiumProgressBarEnabled: false,
+//    applicationId: null,
+//    afkTimeout: 300,
+//    afkChannelId: null,
+//    systemChannelId: '877605118973993043',
+//    premiumTier: 0,
+//    widgetEnabled: null,
+//    widgetChannelId: null,
+//    explicitContentFilter: 2,
+//    mfaLevel: 0,
+//    joinedTimestamp: 1788209180549,
+//    defaultMessageNotifications: 1,
+//    systemChannelFlags: SystemChannelFlagsBitField { bitfield: 0 },
+//    maximumMembers: 25000000,
+//    maximumPresences: null,
+//    maxVideoChannelUsers: 25,
+//    maxStageVideoChannelUsers: 50,
+//    approximateMemberCount: null,
+//    approximatePresenceCount: null,
+//    vanityURLUses: null,
+//    rulesChannelId: '1052140750466461696',
+//    publicUpdatesChannelId: '1052140750466461697',
+//    preferredLocale: 'en-US',
+//    safetyAlertsChannelId: null,
+//    ownerId: '447111749204705294',
+//    emojis: GuildEmojiManager { guild: [Circular *1] },
+//    stickers: GuildStickerManager { guild: [Circular *1] },
+//    incidentsData: null
+//  },
+//  premiumSinceTimestamp: null,
+//  nickname: null,
+//  pending: false,
+//  communicationDisabledUntilTimestamp: null,
+//  user: User {
+//    id: '843838740790247460',
+//    bot: false,
+//    system: false,
+//    flags: UserFlagsBitField { bitfield: 0 },
+//    username: 'yasmin31861',
+//    globalName: 'Yasmin <3',
+//    discriminator: '0',
+//    avatar: '4844c0a9280345eb2b41e874eedbf5f4',
+//    banner: undefined,
+//    accentColor: undefined,
+//    avatarDecoration: null,
+//    avatarDecorationData: null,
+//    collectibles: null,
+//    primaryGuild: null
+//  },
+//  avatar: null,
+//  banner: null,
+//  joinedTimestamp: 1788210145378,
+//  flags: GuildMemberFlagsBitField { bitfield: 1 },
+//  avatarDecorationData: null,
+//  collectibles: nu

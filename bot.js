@@ -6,7 +6,7 @@ import Files from './util/files.js';
 import Loader from './util/Loader.js';
 import Logger from './util/logger.js';
 
-config();
+config({ quiet: true });
 const logger = new Logger('bot');
 
 if (!process.env.TOKEN) {
