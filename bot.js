@@ -30,6 +30,11 @@ for (const file of Files.getScriptFiles(events)) {
 	const p = path.join(events, file);
 	const event = await import(pathToFileURL(p));
 
+	if (!event.data) {
+		console.log(`Event ${p} is not valid`);
+		process.exit(2);
+	}
+
 	if (event.once) {
 		client.once(event.default.name, (...args) => event.execute(...args));
 	} else {

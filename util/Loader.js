@@ -19,7 +19,14 @@ export default class Loader {
 		const files = Files.getScriptFiles(Files.getCommandsDir());
 
 		for (const f of files) {
-			const command = await import(pathToFileURL(path.join(Files.getCommandsDir(), f)));
+			const commandPath = path.join(Files.getCommandsDir(), f);
+			const command = await import(pathToFileURL(commandPath));
+
+			if (!command.data) {
+				console.log(`Event ${commandPath} is not valid`);
+				process.exit(2);
+			}
+
 			commands.push({
 				name: command.default.data.name,
 				cmd: command.default,
