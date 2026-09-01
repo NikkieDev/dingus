@@ -5,9 +5,11 @@ import { config } from 'dotenv';
 import Files from './util/files.js';
 import Loader from './util/Loader.js';
 import Logger from './util/logger.js';
+import SqliteConnection from './db/sqliteConnection.js';
 
 config({ quiet: true });
 const logger = new Logger('bot');
+const database = new SqliteConnection();
 
 if (!process.env.TOKEN) {
 	logger.error('No token provided');

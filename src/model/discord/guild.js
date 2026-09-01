@@ -4,6 +4,7 @@ export default class Guild {
 	#members;
 	#memberCount;
 	#joinedAt;
+	#ownerId;
 
 	/*
 	* @returns {Guild}
@@ -15,6 +16,7 @@ export default class Guild {
 		__self.#members = obj.members;
 		__self.#memberCount = obj.memberCount;
 		__self.#joinedAt = obj.joinedTimestamp;
+		__self.#ownerId = obj.ownerId;
 
 		return __self;
 	}
@@ -40,6 +42,10 @@ export default class Guild {
 
 	getJoinedAt() {
 		return this.#joinedAt;
+	}
+
+	getOwnerId() {
+		return this.#ownerId;
 	}
 }
 
