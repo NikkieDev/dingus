@@ -1,7 +1,7 @@
 import IActiveRecord from './IActiveRecord.js';
 import { userProfileTable } from '../db/schema.js';
 
-export default class userProfile extends IActiveRecord {
+export default class UserProfile extends IActiveRecord {
 	id;
 	guildMemberId;
 	name;

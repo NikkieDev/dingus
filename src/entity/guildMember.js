@@ -59,7 +59,7 @@ export default class GuildMember extends IActiveRecord {
 		const result = await this.db
 			.select()
 			.from(guildTable)
-			.where(eq(guildTable.discordId, this.guildId))
+			.where(eq(guildTable.id, this.guildId))
 		;
 
 		if (0 === result.length) {
@@ -88,7 +88,9 @@ export default class GuildMember extends IActiveRecord {
 			.returning()
 		;
 
-		this.id = inserted[0].id;
+		if (0 !== inserted.length) {
+			this.id = inserted[0].id;
+		}
 	}
 
 
