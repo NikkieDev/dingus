@@ -24,8 +24,7 @@ export default class Guild extends IActiveRecord {
 		this.ownerDiscordId = ownerDiscordId;
 		this.name = name;
 		this.description = description;
-		this.createdAt = new Date().toISOString();
-		this.updatedAt = new Date().toISOString();
+		this.updatedAt = new Date();
 	}
 
 	async save() {
@@ -34,7 +33,7 @@ export default class Guild extends IActiveRecord {
 			ownerDiscordId: this.ownerDiscordId,
 			name: this.name,
 			description: this.description,
-			updatedAt: this.updatedAt,
+			updatedAt: this.updatedAt.toISOString(),
 		};
 
 		const inserted = await this.db.insert(guildTable)
