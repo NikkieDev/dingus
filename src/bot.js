@@ -22,9 +22,10 @@ const loader = new Loader(
 	process.env.CLIENT_ID,
 	'prod' === process.env.ENVIRONMENT
 );
-const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]});
-client.commands = new Collection();
 
+const client = new Client({intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers]});
+
+client.commands = new Collection();
 for (const { name, cmd } of await loader.registerCommands()) {
 	client.commands.set(name, cmd);
 }
