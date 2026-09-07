@@ -24,6 +24,7 @@ export const userProfileTable = sqliteTable('user_profile', {
 	pronouns: text(),
 	sexuality: text(),
 	gender: text(),
+	about: text(),
 	createdAt: text().notNull().default(sql`(current_timestamp)`), 
 	updatedAt: text().notNull().default(sql`(current_timestamp)`),
 });

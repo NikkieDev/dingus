@@ -16,7 +16,8 @@ export default class UserProfile extends IActiveRecord {
 		name = '',
 		pronouns = '/',
 		sexuality = null,
-		gender = null
+		gender = null,
+		about = '',
 	) {
 		super();
 
@@ -25,11 +26,12 @@ export default class UserProfile extends IActiveRecord {
 		this.pronouns = pronouns;
 		this.sexuality = sexuality;
 		this.gender = gender;
+		this.about = about;
 		this.updatedAt = new Date();
 	}
 
-	static new() {
-		return new UserProfile();
+	static new(memberId) {
+		return new UserProfile(memberId);
 	}
 
 	async save() {
@@ -39,6 +41,7 @@ export default class UserProfile extends IActiveRecord {
 			pronouns: this.pronouns,
 			sexuality: this.sexuality,
 			gender: this.gender,
+			about: this.about,
 			updatedAt: new Date().toISOString(),
 		};
 

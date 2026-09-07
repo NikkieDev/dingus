@@ -25,20 +25,17 @@ export default  {
 
 			return;
 		} else if (interaction.isModalSubmit()) {
-			if ('updateModal' === interaction.customId) {
+			if ('identityModal' === interaction.customId) {
 				await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
 				/** @type {GuildMember} */
 				let member = await GuildMember.find(interaction.user.id);
 				if (!member) {
 					member = new GuildMember(interaction.user.id);
-
 					await member.save();
 				}
 
-				const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new();
-
-				profile.guildMemberId = member.id;
+				const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
 				profile.name = interaction.fields.getTextInputValue('nameText');
 				profile.gender = interaction.fields.getStringSelectValues('genderSelect');
 				profile.pronouns = `${interaction.fields.getStringSelectValues('subjectivePronounSelect')}/${interaction.fields.getStringSelectValues('objectivePronounSelect')}`;
@@ -48,6 +45,25 @@ export default  {
 				await interaction.editReply({ content: 'Your identity is saved' });
 
 				logger.info(`[${interaction.user.username} - ${interaction.user.id}] saved their new identity`);
+			}
+
+			if ('aboutModal' === interaction.customId) {
+				await interaction.deferReply({ flags: MessageFlags.Ephemeral });
+
+				/** @type {GuildMember} */
+				let member = await GuildMember.find(interaction.user.id);
+				if (!member) {
+					member = new GuildMember(interaction.user.id);
+					await member.save();
+				}
+
+				const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
+				profile.about = interaction.fields.getTextInputValue('aboutText');
+
+				await profile.save();
+				await interaction.editReply({ content: 'Your about is saved' });
+
+				logger.info(`[${interaction.user.username} - ${interaction.user.id}] saved their new about`);
 			}
 		}
 	}

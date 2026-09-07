@@ -45,6 +45,7 @@ export default class GuildMember extends IActiveRecord {
 			result[0].pronouns,
 			result[0].sexuality,
 			result[0].gender,
+			result[0].about,
 		);
 
 		profile.updatedAt = result[0].updatedAt;

@@ -1,0 +1,7 @@
+services:
+  dingus:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./private:/app/private
+      - ./src:/app/src

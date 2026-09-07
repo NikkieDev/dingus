@@ -7,19 +7,22 @@ import UserProfile from "../entity/userProfile.js";
 
 export default {
 	data: new SlashCommandBuilder()
-		.setName('update')
+		.setName('identity')
 		.setDescription('Update your pronoun profile'),
 	async execute(ctx) {
 		const identityPath = path.join(Files.getConfigsDir(), 'data.json');
 		const identities = await import(pathToFileURL(identityPath), { with: { type: 'json'} });
 
 		const username = ctx.user.globalName;
-
-		const member = await GuildMember.find(ctx.user.id);
-		const profile = await member?.hasProfile() ? await member?.getProfile() : UserProfile.new();
+		let member = await GuildMember.find(ctx.user.id);
+		if (!member) {
+			member = new GuildMember(ctx.user.id);
+			await member.save();
+		}
+		const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
 
 		const modal = new ModalBuilder()
-			.setCustomId('updateModal')
+			.setCustomId('identityModal')
 			.setTitle(`${username}'s profile`)
 		;
 
@@ -33,7 +36,7 @@ export default {
 		const nameTextInput = new TextInputBuilder()
 			.setCustomId('nameText')
 			.setValue(profile.name || ctx.user.globalName)
-			.setMinLength(4)
+			.setMinLength(3)
 			.setMaxLength(24)
 			.setStyle(TextInputStyle.Short)
 		;
@@ -43,7 +46,7 @@ export default {
 			.setTextInputComponent(nameTextInput)
 		;
 
-		selectors.forEach(selector => modal.addLabelComponents(selector));
+		modal.addLabelComponents(selectors);
 		modal.addLabelComponents(nameTextLabel);
 
 		await ctx.showModal(modal);

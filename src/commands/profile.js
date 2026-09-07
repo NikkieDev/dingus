@@ -22,8 +22,10 @@ export default {
 		const profile = await member.getProfile();
 
 		const textDisplay = new TextDisplayBuilder().setContent(
-			`**${target.globalName}'s** identity\n\nCall me **${profile.name}**\nRefer to me as: **${profile.pronouns}**\nI'm **${profile.gender}** and **${profile.sexuality}**`
+			`**${target.globalName}'s** identity\n\nCall me **${profile.name}**\nRefer to me as: **${profile.pronouns}**\nI'm **${profile.gender}** and **${profile.sexuality}**
+			\nAbout ${profile.name}:\n${profile.about}`
 		);
+
 		await ctx.editReply({
 			components: [textDisplay],
 			flags: MessageFlags.IsComponentsV2,
