@@ -12,11 +12,11 @@ export default class UserProfile extends IActiveRecord {
 	updatedAt;
 
 	constructor(
-		guildMemberId,
-		name,
-		pronouns,
-		sexuality,
-		gender
+		guildMemberId = null,
+		name = '',
+		pronouns = '/',
+		sexuality = null,
+		gender = null
 	) {
 		super();
 
@@ -29,14 +29,7 @@ export default class UserProfile extends IActiveRecord {
 	}
 
 	static new() {
-		return {
-			name: '',
-			pronouns: null,
-			sexuality: null,
-			gender: null,
-			getSubjectivePronoun: () => null,
-			getObjectivePronoun: () => null,
-		};
+		return new UserProfile();
 	}
 
 	async save() {
@@ -46,7 +39,7 @@ export default class UserProfile extends IActiveRecord {
 			pronouns: this.pronouns,
 			sexuality: this.sexuality,
 			gender: this.gender,
-			updatedAt: this.updatedAt.toISOString(),
+			updatedAt: new Date().toISOString(),
 		};
 
 		const inserted = await this.db.insert(userProfileTable)

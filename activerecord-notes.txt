@@ -1,0 +1,38 @@
+Short answer: your current design is already reasonably OOP - the boilerplate isn't a paradigm problem, it's that each entity re-implements the same "row -> instance" mapping and connection lookup by hand. I'd push more logic *up* into IActiveRecord rather than add more layers on top.
+
+Biggest win - kill the positional-argument row mapping. Every findById does `new Guild(result[0].discordId, result[0].ownerDiscordId, ...)` - order-dependent, and adding a column means touching the constructor call in every finder. Since your row shape already matches your field names, something like:
+
+// IActiveRecord.js
+static hydrate(row) {
+  return row ? Object.assign(Object.create(this.prototype), row) : null;
+}
+
+then Guild.findById becomes `return this.hydrate(result[0])` (still calling super()-equivalent setup once via a small init() if you need the db handle). This is the same instinct as Doctrine's hydrator - you already know the pattern, it's just manual here.
+
+Second - stop re-resolving the connection everywhere. `new SqliteConnection().getDatabase()` shows up in every static method and every constructor. Since it's already a singleton, just export a ready-made db from sqliteConnection.js and have IActiveRecord hold a static getter `static get db()` - one indirection instead of two.
+
+Third - a generic findOneBy(column, value) in the base class, so subclasses' finders shrink to one line (findByDiscordId calling this.findOneBy(guildTable.discordId, id)). This is the "more OOP" lever worth pulling - shared query logic in the parent, table/column specifics in the child.
+
+What I would *not* do: build a generic repository/query-builder layer on top of Drizzle - Drizzle already is your query layer, and stacking abstraction on an abstraction just to look more "framework-y" will fight the tool for 3 entities. File structure (type-based: entity/ / commands/ / events/) is fine as-is; only worth moving to domain-based folders if you actually bring more modules over from archive/ later.
+
+---
+
+Events:
+
+The events themselves (onClientReady.js, etc.) are fine as plain {name, once, execute} objects - that's idiomatic discord.js, no need to wrap them in classes like IActiveRecord for a handful of tiny stateless handlers with no shared query logic to hoist.
+
+Note: commands and events are deliberately kept as separate processes/loaders (not merging event registration into Loader) - that's intentional, not something to "fix" later.
+
+Small bit of syntactic sugar worth considering: each event hand-rolls `new Logger('onGuildJoin')` with a string that has to match the filename by convention. A tiny `defineEvent({ name, once, execute })` factory could derive/inject the logger automatically from the event name instead of repeating it as a string literal in every file, e.g.:
+
+// util/defineEvent.js
+export default function defineEvent({ name, once = false, execute }) {
+  const logger = new Logger(name);
+  return { name, once, execute: (...args) => execute(...args, logger) };
+}
+
+Not a big win at 3 files, but removes one duplicated, typo-prone string per event file.
+
+---
+
+TODO: remove `joinedAt` from GuildMember's constructor - determining/setting join time is not the constructor's job.

@@ -3,7 +3,7 @@ import UserProfile from '../entity/userProfile.js';
 import Guild from '../entity/guild.js';
 import { guildMemberTable, guildTable, userProfileTable } from '../db/schema.js';
 import SqliteConnection from '../db/sqliteConnection.js';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 
 export default class GuildMember extends IActiveRecord {
 	id;
@@ -101,11 +101,16 @@ export default class GuildMember extends IActiveRecord {
 	/*
 	* Get guildmember by discord ID
 	*/
-	static async findById(memberId) {
+	static async find(memberId, guildId) {
 		const result = await new SqliteConnection().getDatabase()
 			.select()
 			.from(guildMemberTable)
-			.where(eq(guildMemberTable.memberId, memberId))
+			.where(
+				and(
+					eq(guildMemberTable.memberId, memberId),
+					eq(guildMemberTable.guildId, guildId)
+				)
+			)
 		;
 
 		if (0 === result.length) {

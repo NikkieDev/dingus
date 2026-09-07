@@ -1,0 +1,3 @@
+Make sure all dates are javascript generated
+GuildMember doesn't need updatedAt
+GuildMember doesn't need both joinedAt AND createdAt

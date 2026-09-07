@@ -12,8 +12,9 @@ export default {
 			return;
 		}
 
-		if (!await GuildMember.findById(memberObj.user.id)) {
-			const guild = await Guild.findById(memberObj.guild.id);
+		const guild = await Guild.findById(memberObj.guild.id);
+
+		if (!await GuildMember.find(memberObj.user.id, guild.id)) {
 			const member = new GuildMember(
 				memberObj.user.id,
 				guild.id,

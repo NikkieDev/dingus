@@ -4,6 +4,7 @@ import path from "path";
 import Files from '../util/files.js';
 import GuildMember from '../entity/guildMember.js';
 import UserProfile from "../entity/userProfile.js";
+import Guild from "../entity/guild.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -14,7 +15,9 @@ export default {
 		const identities = await import(pathToFileURL(identityPath), { with: { type: 'json'} });
 
 		const username = ctx.user.globalName;
-		const member = await GuildMember.findById(ctx.user.id);
+
+		const guild = await Guild.findById(ctx.guild.id);
+		const member = await GuildMember.find(ctx.user.id, guild.id);
 		const profile = await member?.hasProfile() ? await member?.getProfile() : UserProfile.new();
 
 		const modal = new ModalBuilder()
@@ -31,7 +34,7 @@ export default {
 
 		const nameTextInput = new TextInputBuilder()
 			.setCustomId('nameText')
-			.setValue(profile.name)
+			.setValue(profile.name || ctx.user.globalName)
 			.setMinLength(4)
 			.setMaxLength(24)
 			.setStyle(TextInputStyle.Short)
