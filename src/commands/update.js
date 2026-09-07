@@ -1,4 +1,4 @@
-import { LabelBuilder, ModalBuilder, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder } from "discord.js";
+import { LabelBuilder, ModalBuilder, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, TextInputBuilder, TextInputStyle } from "discord.js";
 import { pathToFileURL } from 'url';
 import path from "path";
 import Files from '../util/files.js';
@@ -29,7 +29,22 @@ export default {
 			buildSelect('sexualitySelect', 'Hetero, gay, lesbian, etc', 'Who do you fall for?', identities.default.sexuality, profile.sexuality),
 		];
 
+		const nameTextInput = new TextInputBuilder()
+			.setCustomId('nameText')
+			.setValue(profile.name)
+			.setMinLength(4)
+			.setMaxLength(24)
+			.setStyle(TextInputStyle.Short)
+		;
+
+		const nameTextLabel = new LabelBuilder()
+			.setLabel('What do you want people to call you?')
+			.setTextInputComponent(nameTextInput)
+		;
+
 		selectors.forEach(selector => modal.addLabelComponents(selector));
+		modal.addLabelComponents(nameTextLabel);
+
 		await ctx.showModal(modal);
 	}
 }
