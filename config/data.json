@@ -1,0 +1,16 @@
+{
+	"gender": ["Male", "Female", "Non-binary", "Genderfluid", "Agender", "Other"],
+	"pronoun": {
+		"subject": ["She", "They", "He", "Other"],
+		"object": ["Her", "Them", "Him", "Other"]
+	},
+	"sexuality": [
+		"Heterosexual",
+		"Gay",
+		"Lesbian",
+		"Bisexual",
+		"Pansexual",
+		"Asexual (spectrum)",
+		"Queer"
+	]
+}

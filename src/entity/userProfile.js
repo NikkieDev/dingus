@@ -7,6 +7,7 @@ export default class UserProfile extends IActiveRecord {
 	name;
 	pronouns;
 	gender;
+	sexuality;
 	createdAt;
 	updatedAt;
 
@@ -14,6 +15,7 @@ export default class UserProfile extends IActiveRecord {
 		guildMemberId,
 		name,
 		pronouns,
+		sexuality,
 		gender
 	) {
 		super();
@@ -21,8 +23,20 @@ export default class UserProfile extends IActiveRecord {
 		this.guildMemberId = guildMemberId;
 		this.name = name;
 		this.pronouns = pronouns;
+		this.sexuality = sexuality;
 		this.gender = gender;
 		this.updatedAt = new Date();
+	}
+
+	static new() {
+		return {
+			name: '',
+			pronouns: null,
+			sexuality: null,
+			gender: null,
+			getSubjectivePronoun: () => null,
+			getObjectivePronoun: () => null,
+		};
 	}
 
 	async save() {
@@ -30,6 +44,7 @@ export default class UserProfile extends IActiveRecord {
 			guildMemberId: this.guildMemberId,
 			name: this.name,
 			pronouns: this.pronouns,
+			sexuality: this.sexuality,
 			gender: this.gender,
 			updatedAt: this.updatedAt.toISOString(),
 		};
@@ -41,5 +56,13 @@ export default class UserProfile extends IActiveRecord {
 		;
 
 		this.id = inserted[0].id;
+	}
+
+	getSubjectivePronoun() {
+		return this.pronouns.split('/')[0];
+	}
+
+	getObjectivePronoun() {
+		return this.pronouns.split('/')[1];
 	}
 }

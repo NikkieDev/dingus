@@ -9,6 +9,10 @@ export default class Files {
 		return fs.readdirSync(dir).filter(file => file.endsWith('.js'));
 	}
 
+	static getConfigsDir() {
+		return path.join(__dirname, '..', '..', 'config');
+	}
+
 	static getCommandsDir() {
 		return path.join(__dirname, '..', 'commands');
 	}

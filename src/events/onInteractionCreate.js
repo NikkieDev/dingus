@@ -18,7 +18,7 @@ export default  {
 			try {
 				await command.execute(interaction);
 			} catch (error) {
-				logger.error(error.message);
+				logger.error(`${interaction.commandName} - ${error.message}`);
 			}
 		}
 	}

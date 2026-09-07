@@ -17,7 +17,6 @@ export default {
 			const member = new GuildMember(
 				memberObj.user.id,
 				guild.id,
-				new Date(),
 			);
 
 			await member.save();

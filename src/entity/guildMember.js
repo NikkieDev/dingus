@@ -16,14 +16,13 @@ export default class GuildMember extends IActiveRecord {
 	constructor(
 		memberId,
 		guildId,
-		joinedAt,
 	) {
 		super();
 
 		this.memberId = memberId;
 		this.guildId = guildId;
-		this.joinedAt = joinedAt;
-		this.updatedAt = new Date()
+		this.joinedAt = new Date();
+		this.updatedAt = new Date();
 	}
 
 	async hasProfile() {
@@ -47,12 +46,18 @@ export default class GuildMember extends IActiveRecord {
 			return null;
 		}
 
-		return new UserProfile(
+		const profile = new UserProfile(
 			this.id,
 			result[0].name,
 			result[0].pronouns,
+			result[0].sexuality,
 			result[0].gender,
 		);
+
+		profile.updatedAt = result[0].updatedAt;
+		profile.createdAt = result[0].createdAt;
+
+		return profile;
 	}
 
 	async getGuild() {
@@ -78,7 +83,7 @@ export default class GuildMember extends IActiveRecord {
 		const data = {
 			memberId: this.memberId,
 			guildId: this.guildId,
-			joinedAt: this.joinedAt,
+			joinedAt: this.joinedAt.toISOString(),
 			updatedAt: this.updatedAt.toISOString(),
 		};
 
@@ -93,7 +98,9 @@ export default class GuildMember extends IActiveRecord {
 		}
 	}
 
-
+	/*
+	* Get guildmember by discord ID
+	*/
 	static async findById(memberId) {
 		const result = await new SqliteConnection().getDatabase()
 			.select()
@@ -108,8 +115,12 @@ export default class GuildMember extends IActiveRecord {
 		const guildMember = new GuildMember(
 			result[0].memberId,
 			result[0].guildId,
-			result[0].joinedAt,
 		);
+
+		guildMember.id = result[0].id;
+		guildMember.joinedAt = result[0].joinedAt;
+		guildMember.createdAt = result[0].createdAt;
+		guildMember.updatedAt = result[0].updatedAt;
 
 		return guildMember;
 	}
