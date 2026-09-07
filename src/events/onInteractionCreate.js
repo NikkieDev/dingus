@@ -2,7 +2,6 @@ import { Events, MessageFlags } from "discord.js";
 import Logger from '../util/logger.js';
 import GuildMember from '../entity/guildMember.js';
 import UserProfile from "../entity/userProfile.js";
-import Guild from '../entity/guild.js';
 
 export default  {
 	name: Events.InteractionCreate,
@@ -29,15 +28,10 @@ export default  {
 			if ('updateModal' === interaction.customId) {
 				await interaction.deferReply({ flags: MessageFlags.Ephemeral });
 
-				const guild = await Guild.findById(interaction.guildId);
-
 				/** @type {GuildMember} */
-				let member = await GuildMember.find(interaction.user.id, guild.id);
+				let member = await GuildMember.find(interaction.user.id);
 				if (!member) {
-					member = new GuildMember(
-						interaction.user.id,
-						guild.id,
-					);
+					member = new GuildMember(interaction.user.id);
 
 					await member.save();
 				}
@@ -52,6 +46,8 @@ export default  {
 
 				await profile.save();
 				await interaction.editReply({ content: 'Your identity is saved' });
+
+				logger.info(`[${interaction.user.username} - ${interaction.user.id}] saved their new identity`);
 			}
 		}
 	}

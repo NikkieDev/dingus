@@ -11,18 +11,15 @@ export const guildTable = sqliteTable('guild', {
 	updatedAt: text().notNull().default(sql`(current_timestamp)`),
 });
 
-export const guildMemberTable = sqliteTable('guild_member', {
+export const memberTable = sqliteTable('member', {
 	id: int().primaryKey({ autoIncrement: true }),
 	memberId: text().notNull(),
-	guildId: int().references(() => guildTable.id),
 	joinedAt: text().notNull().default(sql`(current_timestamp)`),
-	createdAt: text().notNull().default(sql`(current_timestamp)`), 
-	updatedAt: text().notNull().default(sql`(current_timestamp)`),
 });
 
 export const userProfileTable = sqliteTable('user_profile', {
 	id: int().primaryKey({ autoIncrement: true }),
-	guildMemberId: int().references(() => guildMemberTable.id).unique(),
+	guildMemberId: int().references(() => memberTable.id).unique(),
 	name: text(),
 	pronouns: text(),
 	sexuality: text(),

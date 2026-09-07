@@ -4,7 +4,6 @@ import path from "path";
 import Files from '../util/files.js';
 import GuildMember from '../entity/guildMember.js';
 import UserProfile from "../entity/userProfile.js";
-import Guild from "../entity/guild.js";
 
 export default {
 	data: new SlashCommandBuilder()
@@ -16,8 +15,7 @@ export default {
 
 		const username = ctx.user.globalName;
 
-		const guild = await Guild.findById(ctx.guild.id);
-		const member = await GuildMember.find(ctx.user.id, guild.id);
+		const member = await GuildMember.find(ctx.user.id);
 		const profile = await member?.hasProfile() ? await member?.getProfile() : UserProfile.new();
 
 		const modal = new ModalBuilder()

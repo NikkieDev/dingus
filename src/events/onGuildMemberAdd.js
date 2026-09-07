@@ -14,13 +14,10 @@ export default {
 
 		const guild = await Guild.findById(memberObj.guild.id);
 
-		if (!await GuildMember.find(memberObj.user.id, guild.id)) {
-			const member = new GuildMember(
-				memberObj.user.id,
-				guild.id,
-			);
-
+		if (!await GuildMember.find(memberObj.user.id)) {
+			const member = new GuildMember(memberObj.user.id);
 			await member.save();
+
 			logger.info(`User ${member.memberId} has joined Guild ${guild.name}`);
 		}
 	}

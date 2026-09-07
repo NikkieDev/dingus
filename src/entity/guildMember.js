@@ -1,28 +1,21 @@
 import IActiveRecord from './IActiveRecord.js';
 import UserProfile from '../entity/userProfile.js';
-import Guild from '../entity/guild.js';
-import { guildMemberTable, guildTable, userProfileTable } from '../db/schema.js';
+import { memberTable, userProfileTable } from '../db/schema.js';
 import SqliteConnection from '../db/sqliteConnection.js';
-import { and, eq } from 'drizzle-orm';
+import { eq } from 'drizzle-orm';
 
 export default class GuildMember extends IActiveRecord {
 	id;
 	memberId;
-	guildId;
 	joinedAt;
-	createdAt;
-	updatedAt;
 
 	constructor(
 		memberId,
-		guildId,
 	) {
 		super();
 
 		this.memberId = memberId;
-		this.guildId = guildId;
 		this.joinedAt = new Date();
-		this.updatedAt = new Date();
 	}
 
 	async hasProfile() {
@@ -60,34 +53,14 @@ export default class GuildMember extends IActiveRecord {
 		return profile;
 	}
 
-	async getGuild() {
-		const result = await this.db
-			.select()
-			.from(guildTable)
-			.where(eq(guildTable.id, this.guildId))
-		;
-
-		if (0 === result.length) {
-			return null;
-		}
-
-		return new Guild(
-			result[0].discordId,
-			result[0].ownerDiscordId,
-			result[0].name,
-			result[0].description,
-		);
-	}
-
 	async save() {
 		const data = {
 			memberId: this.memberId,
 			guildId: this.guildId,
 			joinedAt: this.joinedAt.toISOString(),
-			updatedAt: this.updatedAt.toISOString(),
 		};
 
-		const inserted = await this.db.insert(guildMemberTable)
+		const inserted = await this.db.insert(memberTable)
 			.values(data)
 			.onConflictDoNothing()
 			.returning()
@@ -101,31 +74,21 @@ export default class GuildMember extends IActiveRecord {
 	/*
 	* Get guildmember by discord ID
 	*/
-	static async find(memberId, guildId) {
+	static async find(memberId) {
 		const result = await new SqliteConnection().getDatabase()
 			.select()
-			.from(guildMemberTable)
-			.where(
-				and(
-					eq(guildMemberTable.memberId, memberId),
-					eq(guildMemberTable.guildId, guildId)
-				)
-			)
+			.from(memberTable)
+			.where(eq(memberTable.memberId, memberId))
 		;
 
 		if (0 === result.length) {
 			return null;
 		}
 
-		const guildMember = new GuildMember(
-			result[0].memberId,
-			result[0].guildId,
-		);
+		const guildMember = new GuildMember(result[0].memberId);
 
 		guildMember.id = result[0].id;
 		guildMember.joinedAt = result[0].joinedAt;
-		guildMember.createdAt = result[0].createdAt;
-		guildMember.updatedAt = result[0].updatedAt;
 
 		return guildMember;
 	}
