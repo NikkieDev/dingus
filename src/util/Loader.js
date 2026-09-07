@@ -51,4 +51,10 @@ export default class Loader {
 		// pop json using destructuring
 		return commands.map(({ json, ...cmd }) => cmd);
 	}
+
+	async removeAllCommands() {
+		await this.rest.put(Routes.applicationCommands(this.clientId), { body: [] });
+		await this.rest.put(Routes.applicationGuildCommands(this.clientId, guildId), { body: [] });
+
+	}
 }

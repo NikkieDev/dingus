@@ -5,6 +5,6 @@ export default {
 		.setName('update')
 		.setDescription('Update your pronoun profile'),
 	async execute(ctx) {
-		
+		await ctx.reply('pong');
 	}
 }
