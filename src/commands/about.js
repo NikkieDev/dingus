@@ -24,7 +24,7 @@ export default {
 		const aboutTextInput = new TextInputBuilder()
 			.setCustomId('aboutText')
 			.setValue(profile.about)
-			.setRequired(false)
+			.setRequired(true)
 			.setMaxLength(256)
 			.setStyle(TextInputStyle.Paragraph)
 		;

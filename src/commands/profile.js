@@ -23,7 +23,7 @@ export default {
 
 		const textDisplay = new TextDisplayBuilder().setContent(
 			`**${target.globalName}'s** identity\n\nCall me **${profile.name}**\nRefer to me as: **${profile.pronouns}**\nI'm **${profile.gender}** and **${profile.sexuality}**
-			\nAbout ${profile.name}:\n${profile.about}`
+			\nAbout ${profile.name}:\n${profile.about || 'Nothing here yet..' }`
 		);
 
 		await ctx.editReply({
