@@ -10,7 +10,7 @@ export default {
 		.setName('identity')
 		.setDescription('Update your pronoun profile'),
 	async execute(ctx) {
-		const identityPath = path.join(Files.getConfigsDir(), 'data.json');
+		const identityPath = path.join(Files.getConfigsDir(), 'identity.json');
 		const identities = await import(pathToFileURL(identityPath), { with: { type: 'json'} });
 
 		const username = ctx.user.globalName;

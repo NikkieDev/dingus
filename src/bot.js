@@ -5,6 +5,7 @@ import { config } from 'dotenv';
 import Files from './util/files.js';
 import Loader from './util/Loader.js';
 import Logger from './util/logger.js';
+import WebhookServer from './server.js';
 import SqliteConnection from './db/sqliteConnection.js';
 
 config({ quiet: true });
@@ -48,4 +49,8 @@ for (const file of Files.getScriptFiles(events)) {
 }
 
 client.login(process.env.TOKEN);
+
+const httpServer = new WebhookServer(client);
+httpServer.listen();
+
 logger.info('Client logged in');

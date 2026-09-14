@@ -1,6 +1,6 @@
 import IActiveRecord from './IActiveRecord.js';
 import UserProfile from '../entity/userProfile.js';
-import { memberTable, userProfileTable } from '../db/schema.js';
+import { memberTable, userProfileTable, voteTable } from '../db/schema.js';
 import SqliteConnection from '../db/sqliteConnection.js';
 import { eq } from 'drizzle-orm';
 
@@ -9,9 +9,7 @@ export default class GuildMember extends IActiveRecord {
 	memberId;
 	joinedAt;
 
-	constructor(
-		memberId,
-	) {
+	constructor(memberId) {
 		super();
 
 		this.memberId = memberId;
@@ -54,11 +52,19 @@ export default class GuildMember extends IActiveRecord {
 		return profile;
 	}
 
+	async getVoteCount() {
+		return await this.db.$count(voteTable, eq(voteTable.memberId, this.memberId));
+	}
+
+	async addVote() {
+		const data = { memberId: this.memberId };
+		await this.db.insert(voteTable).values(data);
+	}
+
 	async save() {
 		const data = {
 			memberId: this.memberId,
 			guildId: this.guildId,
-			joinedAt: this.joinedAt.toISOString(),
 		};
 
 		const inserted = await this.db.insert(memberTable)

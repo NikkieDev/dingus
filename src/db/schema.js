@@ -15,6 +15,7 @@ export const memberTable = sqliteTable('member', {
 	id: int().primaryKey({ autoIncrement: true }),
 	memberId: text().notNull(),
 	joinedAt: text().notNull().default(sql`(current_timestamp)`),
+	votes: int(),
 });
 
 export const userProfileTable = sqliteTable('user_profile', {
@@ -27,4 +28,10 @@ export const userProfileTable = sqliteTable('user_profile', {
 	about: text(),
 	createdAt: text().notNull().default(sql`(current_timestamp)`), 
 	updatedAt: text().notNull().default(sql`(current_timestamp)`),
+});
+
+export const voteTable = sqliteTable('vote', {
+	id: int().primaryKey({ autoIncrement: true }),
+	memberId: text().notNull(),
+	votedAt: text().notNull().default(sql`(current_timestamp)`),
 });
