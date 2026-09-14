@@ -26,6 +26,7 @@ export default class WebhookServer {
 			const serializedBody = Webhook.fromJSON(req.body);
 			const discordId = serializedBody.data.user.getDiscordId();
 
+			const dmChannel = await botClient.users.createDM(discordId);
 			const member = await GuildMember.find(discordId);
 			if (member) {
 				await member.addVote();
@@ -35,12 +36,20 @@ export default class WebhookServer {
 				this.logger.info(`${discordId} has voted! Vote count: ${voteCount}`);
 
 				try {
-					const dmChannel = await botClient.users.createDM(discordId);
 					await dmChannel.send(`Thanks for voting! You've voted ${voteCount} times`);
 				} catch (error) {
 					this.logger.error(error.message);
 				}
+			} else {
+				this.logger.info(`${discordId} has voted!`);
+
+				try {
+					await dmChannel.send(`Thanks for voting!`);
+				} catch (error) {
+					this.logger.error(error.message);
+				}
 			}
+
 
 			return res.status(200).send('ok');
 		});
