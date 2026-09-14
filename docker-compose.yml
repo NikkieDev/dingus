@@ -5,3 +5,5 @@ services:
     volumes:
       - ./private:/app/private
       - ./src:/app/src
+    ports:
+      - 8080:8080
