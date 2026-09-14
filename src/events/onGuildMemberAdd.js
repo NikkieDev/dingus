@@ -12,13 +12,11 @@ export default {
 			return;
 		}
 
-		const guild = await Guild.findById(memberObj.guild.id);
-
 		if (!await GuildMember.find(memberObj.user.id)) {
 			const member = new GuildMember(memberObj.user.id);
 			await member.save();
 
-			logger.info(`User ${member.memberId} has joined Guild ${guild.name}`);
+			logger.info(`User ${member.memberId} has joined Guild ${memberObj.guild.name}`);
 		}
 	}
 }
