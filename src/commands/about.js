@@ -1,20 +1,20 @@
 import { LabelBuilder, ModalBuilder, TextInputBuilder } from "@discordjs/builders";
-import { SlashCommandBuilder, TextInputStyle } from "discord.js";
+import { MessageFlags, SlashCommandBuilder, TextInputStyle } from "discord.js";
 import GuildMember from '../entity/guildMember.js';
-import UserProfile from '../entity/userProfile.js';
 
 export default {
 	data: new SlashCommandBuilder()
 		.setName('about')
 		.setDescription('Update your about'),
 	async execute(ctx) {
-		const username = ctx.user.globalName;
 		let member = await GuildMember.find(ctx.user.id);
-		if (!member) {
-			member = new GuildMember(ctx.user.id);
-			await member.save();
+		if (!member || !await member?.hasProfile()) {
+			await ctx.reply({ flags: MessageFlags.Ephemeral, content: 'Please create an identity first with /identity'});
+			return;
 		}
-		const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
+
+		const username = ctx.user.globalName;
+		const profile = await member.getProfile();
 
 		const modal = new ModalBuilder()
 			.setCustomId('aboutModal')
