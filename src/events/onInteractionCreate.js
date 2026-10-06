@@ -2,6 +2,7 @@ import { Events, MessageFlags } from "discord.js";
 import Logger from '../util/logger.js';
 import GuildMember from '../entity/guildMember.js';
 import UserProfile from "../entity/userProfile.js";
+import IdentityFunction from "../commands/identity.js";
 
 export default  {
 	name: Events.InteractionCreate,
@@ -64,6 +65,10 @@ export default  {
 				await interaction.editReply({ content: 'Your about is saved' });
 
 				logger.info(`[${interaction.user.username} - ${interaction.user.id}] saved their new about`);
+			}
+		} else if (interaction.isButton()) {
+			if ('create_profile_btn' === interaction.customId) {
+				await IdentityFunction.execute(interaction);
 			}
 		}
 	}

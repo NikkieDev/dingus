@@ -1,6 +1,5 @@
 import { MessageFlags, SlashCommandBuilder, TextDisplayBuilder } from "discord.js";
 import GuildMember from '../entity/guildMember.js';
-import UserProfile from "../entity/userProfile.js";
 
 export default {
 	data: new SlashCommandBuilder()
