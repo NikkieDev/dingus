@@ -1,7 +1,8 @@
 import {  ActionRowBuilder, Events } from "discord.js";
 import GuildMember from '../entity/guildMember.js';
 import Logger from '../util/logger.js';
-import CreateAccountButton from '../ui/createAccountButton.js';
+import accountButton from '../ui/accountButton.js';
+import voteButton from '../ui/voteButton.js';
 
 export default {
 	name: Events.GuildMemberAdd,
@@ -32,9 +33,11 @@ export default {
 					throw new Error('No channel');
 				}
 
+				const component = new ActionRowBuilder().addComponents(accountButton, voteButton)
+
 				await channel.send({
 					content: `Hello! Thank you for joining **${guildName}**. You don't seem to have a pronoun profile yet :( you can create one with the button below!`,
-					components: [new ActionRowBuilder().addComponents(CreateAccountButton)],
+					components: [component],
 				});
 			} catch (error) {
 				logger.info(`Unable to message User ${guildMemberName}/${guildMemberId}.`);

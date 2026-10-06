@@ -1,4 +1,4 @@
-import { ButtonBuilder, ButtonStyle, Emoji } from "discord.js";
+import { ButtonBuilder, ButtonStyle } from "discord.js";
 
 export default new ButtonBuilder()
 		.setCustomId('create_profile_btn')
