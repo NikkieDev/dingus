@@ -34,11 +34,12 @@ export default {
 				}
 
 				const component = new ActionRowBuilder().addComponents(accountButton, voteButton)
-
 				await channel.send({
 					content: `Hello! Thank you for joining **${guildName}**. You don't seem to have a pronoun profile yet :( you can create one with the button below!`,
 					components: [component],
 				});
+
+				logger.info(`Messaged user ${guildMemberId}/${guildMemberName} to create a profile`);
 			} catch (error) {
 				logger.info(`Unable to message User ${guildMemberName}/${guildMemberId}.`);
 				console.log(error);
