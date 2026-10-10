@@ -1,8 +1,9 @@
-import { Events, MessageFlags } from "discord.js";
-import Logger from '../util/logger.js';
 import GuildMember from '../entity/guildMember.js';
-import UserProfile from "../entity/userProfile.js";
 import IdentityFunction from "../commands/identity.js";
+import Logger from '../util/logger.js';
+import UserProfile from "../entity/userProfile.js";
+import voteButton from '../ui/voteButton.js';
+import { ActionRowBuilder, Events, MessageFlags, userMention } from "discord.js";
 
 export default  {
 	name: Events.InteractionCreate,
@@ -37,13 +38,16 @@ export default  {
 				}
 
 				const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
-				profile.name = interaction.fields.getTextInputValue('nameText');
 				profile.gender = interaction.fields.getStringSelectValues('genderSelect');
+				profile.name = interaction.fields.getTextInputValue('nameText');
 				profile.pronouns = `${interaction.fields.getStringSelectValues('subjectivePronounSelect')}/${interaction.fields.getStringSelectValues('objectivePronounSelect')}`;
 				profile.sexuality = interaction.fields.getStringSelectValues('sexualitySelect');
 
 				await profile.save();
-				await interaction.editReply({ content: 'Your identity is saved' });
+				await interaction.editReply({ 
+					content: `Your identity is saved, you and others can now see your profile with /profile ${userMention(member.memberId)}`,
+					components: [new ActionRowBuilder().addComponents(voteButton)],
+				});
 
 				logger.info(`[${interaction.user.username} - ${interaction.user.id}] saved their new identity`);
 			}
