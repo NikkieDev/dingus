@@ -13,7 +13,6 @@ export default {
 		const identityPath = path.join(Files.getConfigsDir(), 'identity.json');
 		const identities = await import(pathToFileURL(identityPath), { with: { type: 'json'} });
 
-		const username = ctx.user.globalName;
 		let member = await GuildMember.find(ctx.user.id);
 		if (!member) {
 			member = new GuildMember(ctx.user.id);
@@ -23,7 +22,7 @@ export default {
 
 		const modal = new ModalBuilder()
 			.setCustomId('identityModal')
-			.setTitle(`${username}'s profile`)
+			.setTitle(`${ctx.user.globalName}'s profile`)
 		;
 
 		const selectors = [
@@ -35,7 +34,7 @@ export default {
 
 		const nameTextInput = new TextInputBuilder()
 			.setCustomId('nameText')
-			.setValue(profile.name || ctx.user.globalName)
+			.setValue(profile.name || '')
 			.setMinLength(3)
 			.setMaxLength(24)
 			.setStyle(TextInputStyle.Short)
