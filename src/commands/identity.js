@@ -18,6 +18,7 @@ export default {
 			member = new GuildMember(ctx.user.id);
 			await member.save();
 		}
+
 		const profile = await member.hasProfile() ? await member.getProfile() : UserProfile.new(member.id);
 
 		const modal = new ModalBuilder()
@@ -32,13 +33,16 @@ export default {
 			buildSelect('sexualitySelect', 'Hetero, gay, lesbian, etc', 'Who do you fall for?', identities.default.sexuality, profile.sexuality),
 		];
 
-		const nameTextInput = new TextInputBuilder()
+		let nameTextInput = new TextInputBuilder()
 			.setCustomId('nameText')
-			.setValue(profile.name || '')
 			.setMinLength(3)
 			.setMaxLength(24)
 			.setStyle(TextInputStyle.Short)
 		;
+
+		if ('' !== profile.name) {
+			nameTextInput = nameTextInput.setValue(profile.name);
+		}
 
 		const nameTextLabel = new LabelBuilder()
 			.setLabel('What do you want people to call you?')
